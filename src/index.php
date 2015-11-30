@@ -17,7 +17,7 @@ if (getenv('HEROKU')) {
 $envdb = getenv('CLEARDB_DATABASE_URL') ? getenv('CLEARDB_DATABASE_URL') : getenv('DATABASE_URL');
 
 if ($envdb) {
-	$bs->config(['db' => ['url' => $envdb]]);
+	t::config(['db' => ['url' => $envdb]]);
 }
 
 t::service('Tipsy\Resource/Link', [
