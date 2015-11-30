@@ -14,6 +14,12 @@ if (getenv('HEROKU')) {
 	t::config('../src/config.heroku.ini');
 }
 
+$envdb = getenv('CLEARDB_DATABASE_URL') ? getenv('CLEARDB_DATABASE_URL') : getenv('DATABASE_URL');
+
+if ($envdb) {
+	$bs->config(['db' => ['url' => $envdb]]);
+}
+
 t::service('Tipsy\Resource/Link', [
 	put => function($link) {
 		if ($count > $this->tipsy()->config()['data']['max']) {
