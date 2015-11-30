@@ -8,7 +8,7 @@
 	"env": {
 		"ENV": "heroku"
 	},
-	"logo": "https://raw.githubusercontent.com/arzynik/pulpoloco/master/web/pulpo.svg",
+	"logo": "http://pulpolo.co/pulpo.svg",
 	"scripts": {
 		"postdeploy": "php install/install.php"
 	}

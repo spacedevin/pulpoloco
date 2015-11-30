@@ -1,4 +1,4 @@
-![Pulpo Loco](https://raw.githubusercontent.com/arzynik/pulpoloco/master/web/pulpo.svg)
+![Pulpo Loco](http://pulpolo.co/pulpo.svg)
 
 ## Pulpo Loco
 
