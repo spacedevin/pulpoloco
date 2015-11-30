@@ -1,16 +1,21 @@
-## Taco Loco
+## Pulpo Loco
 
-is a URL shortener
+A self hosted URL shortener
 
 
-#### Requirements
+#### Deploying on Heroku
 
-- [PHP](http://php.net/) >= 5.4.0
-- [Tipsy](http://tipsy.la/) >= 0.7.1
-- [Composer](https://getcomposer.org/)
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
-#### Installation
 
-1. Install Tipsy and the autoload library: **composer install**
-2. Import the database schema in **db/schema.sql**
+#### Deploying on your own environment
 
+You will need MySQL and Apache/Nginx installed.
+
+1. Edit your **src/config.db.ini** file with your user, host, and database.
+1. Open either **install/mysql.sql** or **install/pgsql.sql** and load it into your database.
+1. If using Apache, the **web/.htaccess** file should handle what you need.
+1. If using Nginx, you should use the **src/nginx.conf** file.
+
+
+See [Tipsy Documentation](https://github.com/arzynik/tipsy/wiki) for more information.

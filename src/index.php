@@ -1,44 +1,91 @@
 <?php
 
-date_default_timezone_set('America/Los_Angeles');
-
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$tl = new Tipsy\Tipsy;
+use Tipsy\Tipsy;
+Tipsy::init();
 
-$tl->config('../src/config.ini');
+t::config('../src/config.ini');
+
 if (file_exists('../src/config.db.ini')) {
-	$tl->config('../src/config.db.ini');	
+	t::config('../src/config.db.ini');
+}
+if (getenv('HEROKU')) {
+	t::config('../src/config.heroku.ini');
 }
 
-$tl->service('Tipsy\Resource/Link', [
-	del => function() {
-		$this->delete();
+t::service('Tipsy\Resource/Link', [
+	put => function($link) {
+		if ($count > $this->tipsy()->config()['data']['max']) {
+			if ($this->tipsy()->db()->driver() == 'pgsql') {
+				$q = 'delete from "link" where ctid in (select ctid FROM "link" order by date limit '.($count - $this->tipsy()->config()['data']['max']).')';
+			} else {
+				$q = 'delete from `link` order by id asc limit '.($count - $this->tipsy()->config()['data']['max']);
+			}
+			$this->tipsy()->db()->exec($q);
+		}
 	},
-	byPermalink => function($id) {
-		return $this->q('select * from link where permalink=?', $id)->get(0);
+	find => function($id) {
+		$link = $this->q('select * from link where permalink=?', $id)->get(0);
+		if (!$link) {
+			$link = $this->q('select * from link where id=?', $this->decode($id))->get(0);
+		}
+		return $link;
 	},
 	exports => function() {
 		$ret = [
 			'permalink' => $this->permalink,
 			'date' => $this->date,
 			'hits' => $this->hits,
-			'url' => $this->url
+			'url' => $this->url,
+			'id' => $this->encode($this->id)
 		];
 
 		return $ret;
 	},
+	encode => function($val) {
+		if ($val) {
+			$str = '';
+			do {
+				$i = $val % $this->_base;
+				$str = $this->_chars[$i] . $str;
+				$val = ($val - $i) / $this->_base;
+			} while($val > 0);
+			return $str;
+		} else {
+			return '';
+		}
+	},
+	decode => function($str) {
+		if ($str) {
+			$len = strlen($str);
+			$val = 0;
+			$arr = array_flip(str_split($this->_chars));
+			for($i = 0; $i < $len; ++$i) {
+				$val += (isset($arr[$str[$i]]) ? $arr[$str[$i]] : 0) * pow($this->_base, $len-$i-1);
+			}
+			return $val;
+		} else {
+			return '';
+		}
+	},
+	clean => function($id) {
+		return preg_replace('/[^0-9a-z\-_]/i', '', $id);
+	},
+
+	_chars => '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+	_base => '62',
+
 	_id => 'id',
 	_table => 'link'
 ]);
 
-$tl->router()
-	->when('/:id', function($View, $Link, $Params) {
-		
-		$id = preg_replace('/[^0-9a-z\-_]/i', '', $Params->id);
+t::router()
+	->when(':id', function($View, $Link, $Params) {
+		$id = $Link->clean($Params->id);
 
 		if ($id) {
-			$l = $Link->byPermalink($Params->id);
+			$l = $Link->find($id);
 		} else {
 			$View->display('index');
 			exit;
@@ -47,14 +94,72 @@ $tl->router()
 		if ($l->id) {
 			$l->hits++;
 			$l->save();
-			header('Location: '.$l->url);
+			header('Location: http://'.$l->url);
 		} else {
 			header('Location: /');
 		}
+	})
+	->when('link/:id', function($View, $Link, $Params) {
+		$id = $Link->clean($Params->id);
+
+		if ($id) {
+			$l = $Link->find($id);
+		}
+
+		if ($l->id) {
+			echo $l->json();
+		} else {
+			http_response_code(404);
+		}
+	})
+	->when('view/:id', function($View, $Link, $Params) {
+		$id = $Link->clean($Params->id);
+
+		if ($id) {
+			$l = $Link->find($id);
+		}
+
+		if ($l->id) {
+			$View->display('index');
+		} else {
+			header('Location: /');
+		}
+	})
+	->post('submit', function($Link, $Request) {
+		$Request->url = trim(preg_replace('/^(http|https)/i', '', $Request->url));
+
+		if (!$Request->url || !strpos($Request->url, '.')) {
+			echo json_encode([status => false, message => 'URL is invalid']);
+			exit;
+		}
+
+		$find = [
+			'/ |\+/i',
+			'/[^a-z0-9\-_\.]/i',
+		];
+		$replace = [
+			'-',
+			''
+		];
+
+		$Request->permalink = trim(preg_replace($find, $replace, $Request->permalink));
+
+		if ($Request->permalink && !$Link->check($Request->permalink)) {
+			echo json_encode([status => false, message => 'Permalink is taken']);
+			exit;
+		}
+		$l = $Link->create([
+			date => date('Y-m-d H:i:s'),
+			url => $Request->url,
+			permalink => $Request->permalink ? $Request->permalink : null
+		]);
+
+		echo $l->json();
 	})
 	->otherwise(function($View, $Link, $Request) {
 		$View->display('index');
 	});
 
-$tl->start();
+t::run();
+
 

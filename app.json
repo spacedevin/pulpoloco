@@ -1,0 +1,15 @@
+{
+	"name": "Pulpo Loco",
+	"description": "A self hosted URL shortener",
+	"website": "http://pulpolo.co",
+	"repository": "https://github.com/arzynik/pulpoloco",
+	"keywords": ["tipsy", "url", "shorten"],
+	"addons": ["heroku-postgresql"],
+	"env": {
+		"ENV": "heroku"
+	},
+	"logo": "https://raw.githubusercontent.com/arzynik/pulpoloco/master/web/pulpo.svg",
+	"scripts": {
+		"postdeploy": "php install/install.php"
+	}
+}

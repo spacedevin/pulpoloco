@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="PulpoLoco">
 <head>
-<title>Taco Loco</title>
+<title>Pulpo Loco</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
 
 <link rel="shortcut icon" href="/icon.png">
@@ -10,31 +10,67 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 <meta property="og:image" content="/icon.png">
-<meta property="og:title" content="Taco Loco">
-<meta property="og:url" content="http://tacolo.co">
-<meta property="og:site_name" content="Taco Loco">
+<meta property="og:title" content="Pulpo Loco">
+<meta property="og:url" content="http://pulpolo.co">
+<meta property="og:site_name" content="Pulpo Loco">
 
 
 <link href="/style.css" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=Rye" rel="stylesheet" type="text/css">
 
 </head>
-<body>
-<center>
-<div class="content">
+<body ng-class="{loaded: loaded}">
+	<center>
+	<div class="content">
 
-	<div class="logo">
-		<h1>
-			<a href="/">Taco Loco</a>
-		</h1>
+		<div class="logo">
+			<h1>
+				<a href="/"><img src="/pulpo.svg"></a>
+			</h1>
+		</div>
+
+		<div class="page">
+			<div ng-view></div>
+		</div>
+
+		<div class="footer" ng-class="{loaded: loaded}">
+			<a href="https://github.com/arzynik/pulpoloco">Pulpo Loco</a> is an open source project created by <a href="http://devin.la/" target="_blank">Devin</a>, and built with <a href="http://tipsy.la/" target="_blank">Tipsy</a>.
+			<br><br>
+		</div>
 	</div>
+	</center>
 
-	<div class="footer">
-		<a href="https://github.com/arzynik/tacoloco">Taco Loco</a> is an open source project created by <a href="http://devin.la/" target="_blank">Devin Smith</a>, and built with <a href="http://tipsy.la/" target="_blank">Tipsy</a>.
-		<br><br>
-	</div>
-</div>
-</center>
+	<script type="text/ng-template" id="home.html">
+		<div class="home">
+			<form ng-submit="submit()" class="input">
+				<div class="error" ng-class="{iserror: error}">{{error}}</div>
+				<h2>Enter a URL to shorten</h2>
+				<input type="text" ng-model="url" placeholder="pulpolo.co" autofocus="true">
+				<h2>Enter a permalink <i>(optional)</i></h2>
+				<input type="text" ng-model="permalink" placeholder="pulpo-loco">
+				<br>
+				<button class="submit">Shorten</button>
+			</form>
+		</div>
+	</script>
 
+	<script type="text/ng-template" id="view.html">
+		<div class="link">
+			<form class="input">
+				<input type="text" ng-model="link" id="link">
+				<br><br><br>
+				Hits: {{hits}}
+			</form>
+
+		</div>
+
+	</script>
+
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-resource.js"></script>
+
+	<script type="text/javascript" src="/fastclick.js"></script>
+	<script type="text/javascript" src="/script.js"></script>
 </body>
 </html>
