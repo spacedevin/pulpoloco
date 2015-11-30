@@ -1,3 +1,5 @@
+![Pulpo Loco](https://raw.githubusercontent.com/arzynik/pulpoloco/master/web/pulpo.svg)
+
 ## Pulpo Loco
 
 A self hosted URL shortener
