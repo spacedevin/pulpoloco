@@ -73,7 +73,7 @@ t::service('Tipsy\Resource/Link', [
 		$ret = [
 			'permalink' => $this->permalink,
 			'date' => $this->date,
-			'hits' => $this->hits,
+			'hits' => intval($this->hits),
 			'url' => $this->url,
 			'id' => $this->encode($this->id)
 		];
@@ -108,6 +108,10 @@ t::service('Tipsy\Resource/Link', [
 	},
 	clean => function($id) {
 		return preg_replace('/[^0-9a-z\-_]/i', '', $id);
+	},
+	check => function() {
+		$link = $this->q('select * from link where permalink=?', $id)->get(0);
+		return ($link && $link->id) ? false : true;
 	},
 
 	_chars => '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
