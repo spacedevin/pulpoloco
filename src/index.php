@@ -20,6 +20,37 @@ if ($envdb) {
 	t::config(['db' => ['url' => $envdb]]);
 }
 
+class Db extends \Tipsy\Db {
+	public static function mysqlToPgsql($query) {
+		// replace backticks
+		$query = str_replace('`','"', $query);
+
+		// replace add single quotes to interval statements
+		$query = preg_replace('/(interval) ([0-9]+) ([a-z]+)/i','\\1 \'\\2 \\3\'', $query);
+
+		return $query;
+	}
+
+	public function query($query, $args = []) {
+		if (!$query) {
+			throw new Exception('Query is emtpy');
+		}
+		$query = self::mysqlToPgsql($query);
+		if (!$query) {
+			throw new Exception('mysqlToPgsql Query is emtpy');
+		}
+		return parent::query($query, $args);
+	}
+
+	public function exec($query) {
+		return parent::exec(self::mysqlToPgsql($query));
+	}
+}
+
+if (strpos($envdb, 'postgres') !== false) {
+	t::service('Db');
+}
+
 t::service('Tipsy\Resource/Link', [
 	put => function($link) {
 		if ($count > $this->tipsy()->config()['data']['max']) {
