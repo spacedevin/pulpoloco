@@ -12,7 +12,7 @@ A self hosted URL shortener
 
 #### Deploying on your own environment
 
-You will need MySQL and Apache/Nginx installed.
+You will need MySQL/PostgreSQL and Apache/Nginx installed.
 
 1. Edit your **src/config.db.ini** file with your user, host, and database.
 1. Open either **install/mysql.sql** or **install/pgsql.sql** and load it into your database.
