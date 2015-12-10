@@ -20,4 +20,4 @@ You will need MySQL/PostgreSQL and Apache/Nginx installed.
 1. If using Nginx, you should use the **src/nginx.conf** file.
 
 
-See [Tipsy Documentation](https://github.com/arzynik/tipsy/wiki) for more information.
+See [Tipsy Documentation](https://github.com/tipsyphp/tipsy/wiki) for more information.

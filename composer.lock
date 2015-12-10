@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e777a17234285ac4b8cb1fe981b2afe1",
-    "content-hash": "df7eb7062155ccf15dee7598bda32ef4",
+    "hash": "3e02227347582bdd1cedde8a45fd8551",
+    "content-hash": "0b53624868b8f72f2ef434d5aa1d763e",
     "packages": [
         {
-            "name": "arzynik/tipsy",
+            "name": "tipsyphp/tipsy",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/arzynik/tipsy.git",
-                "reference": "50f695160cb12b98f81f90b0294e35472087827d"
+                "url": "https://github.com/tipsyphp/tipsy.git",
+                "reference": "43f0aa5f311a67dd1305e79616220a9e88b1b7ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/arzynik/tipsy/zipball/50f695160cb12b98f81f90b0294e35472087827d",
-                "reference": "50f695160cb12b98f81f90b0294e35472087827d",
+                "url": "https://api.github.com/repos/tipsyphp/tipsy/zipball/43f0aa5f311a67dd1305e79616220a9e88b1b7ff",
+                "reference": "43f0aa5f311a67dd1305e79616220a9e88b1b7ff",
                 "shasum": ""
             },
             "require": {
@@ -55,15 +55,14 @@
                 "mvw",
                 "php"
             ],
-            "abandoned": "https://github.com/tipsyphp/tipsy",
-            "time": "2015-12-09 20:47:19"
+            "time": "2015-12-10 18:36:21"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "arzynik/tipsy": 20
+        "tipsyphp/tipsy": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

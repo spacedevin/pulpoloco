@@ -1,5 +1,5 @@
 {
 	"require": {
-		"arzynik/tipsy": "dev-master"
+		"tipsyphp/tipsy": "dev-master"
 	}
 }
