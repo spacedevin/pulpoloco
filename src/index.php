@@ -7,9 +7,6 @@ Tipsy::init();
 
 t::config('../src/config.ini');
 
-if (file_exists('../src/config.db.ini')) {
-	t::config('../src/config.db.ini');
-}
 if (getenv('HEROKU')) {
 	t::config('../src/config.heroku.ini');
 }
@@ -18,6 +15,8 @@ $envdb = getenv('CLEARDB_DATABASE_URL') ? getenv('CLEARDB_DATABASE_URL') : geten
 
 if ($envdb) {
 	t::config(['db' => ['url' => $envdb]]);
+} elseif (file_exists('../src/config.db.ini')) {
+	t::config('../src/config.db.ini');
 }
 
 class Db extends \Tipsy\Db {
