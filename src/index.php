@@ -177,6 +177,12 @@ t::router()
 			$Request->url = 'http://'.$Request->url;
 		}
 
+		$url = parse_url($Request->url);
+		if ($url['host'] == $_SERVER['HTTP_HOST'] || $url['host'] == $_SERVER['SERVER_NAME']) {
+			echo json_encode([status => false, message => 'URL is invalid']);
+			exit;
+		}
+
 		$find = [
 			'/ |\+/i',
 			'/[^a-z0-9\-_\.]/i'
