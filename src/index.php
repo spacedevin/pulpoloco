@@ -134,7 +134,7 @@ t::router()
 		if ($l->id) {
 			$l->hits++;
 			$l->save();
-			header('Location: http://'.$l->url);
+			header('Location: '.(strpos($l->url, '://') === false ? 'http://' : '').$l->url);
 		} else {
 			header('Location: /');
 		}
@@ -166,16 +166,20 @@ t::router()
 		}
 	})
 	->post('submit', function($Link, $Request) {
-		$Request->url = trim(preg_replace('/^(http|https)/i', '', $Request->url));
+		$Request->url = trim($Request->url);
 
 		if (!$Request->url || !strpos($Request->url, '.')) {
 			echo json_encode([status => false, message => 'URL is invalid']);
 			exit;
 		}
 
+		if (strpos($Request->url, '://') === false) {
+			$Request->url = 'http://'.$Request->url;
+		}
+
 		$find = [
 			'/ |\+/i',
-			'/[^a-z0-9\-_\.]/i',
+			'/[^a-z0-9\-_\.]/i'
 		];
 		$replace = [
 			'-',
